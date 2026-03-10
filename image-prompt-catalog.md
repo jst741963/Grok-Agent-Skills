@@ -21,7 +21,8 @@ description: 生成包含多格细节特写的日系时尚目录排版图的 Gro
    - 格1：脸部特写，自然皮肤质感，柔和眼神，长波浪黑发
    - 格2：胸前服装细节特写（吊带、蕾丝、领口等）
    - 格3：裙摆下摆与过膝袜边缘特写
-   - 格4：默认展示鞋子；若用户描述中提到值得单独展示的后背、腰部或其他服装细节，则替换为该细节——用户明确提及的细节优先级高于默认选项，因为那是用户最想突出的部分。
+   - 格4：默认展示鞋子；若用户描述中明确提及后背、腰部或其他具体服装细节（如「蝴蝶结系带」「镂空背部」「腰封」等），则替换为该细节——用户明确命名的具体细节优先级高于默认选项，模糊描述（如「很好看的背部设计」）不触发替换，仍使用鞋子
+
    固定顺序是因为目录排版的视觉逻辑是从上到下：脸→胸→裙→脚，符合读者自然浏览路径。
 
 4. **构建主图参数**：
@@ -33,8 +34,8 @@ description: 生成包含多格细节特写的日系时尚目录排版图的 Gro
    - **层1 摄影风格**：professional studio fashion catalog photography, soft diffused natural lighting, ultra clean and sharp yet realistic, no plastic shine, matte finish, velvety smooth skin
    - **层2 人物锚点**：East Asian Chinese adult woman, visual age 18-25, innocent yet subtly seductive restrained expression, petite slender delicate build, perfect smooth flawless legs under stockings, delicate lace naturally adhering without visible press marks
    - **层3 服装细节**：严格匹配用户描述或 Serendipity 默认套装
-   - **层4 排版构图**：left side 4 standalone isolated inset panels arranged vertically（按格1到格4顺序描述）, right side full body occupying approximately two thirds of frame, natural relaxed pose
-   - **层5 背景与收尾**：minimalist light pink gingham grid background, generous negative space top and bottom, no cropping head-to-toe, top-tier composition stability
+   - **层4 排版构图**：left side 4 standalone isolated inset panels arranged vertically（按格1到格4顺序描述）, right side full body occupying approximately two thirds of frame, natural relaxed pose, head-to-toe no cropping
+   - **层5 背景与收尾**：minimalist light pink gingham grid background, generous negative space top and bottom
 
 6. **输出提示词**：输出单个英文提示词代码块，附中文翻译。
 
@@ -43,6 +44,8 @@ description: 生成包含多格细节特写的日系时尚目录排版图的 Gro
 四格 inset 必须保持固定顺序且完全独立——格与格之间不产生交互图形，每格是独立的特写画面，顺序错乱会破坏目录的视觉逻辑。
 
 主图默认正面——背对镜头会让服装正面细节无法展示，违背目录排版的核心目的。
+
+格4替换仅在用户明确命名具体细节时触发——模糊描述不替换，避免主观判断导致每次结果不一致。
 
 不在提示词中使用强调完美无瑕的修饰词（如 hyper-detailed、perfect skin、ultra-realistic）——这类词会强化 AI 生成感，与真实摄影风格的目标相反。层1中的摄影技术描述词（ultra clean、realistic）是例外，因为它们描述的是拍摄风格而非对完美的追求。
 
@@ -53,7 +56,7 @@ description: 生成包含多格细节特写的日系时尚目录排版图的 Gro
 ## 输出规格
 ```
 ## 服装解析
-（中文，简述对用户服装描述的理解，以及四格内容的具体安排）
+（中文，简述对用户服装描述的理解，以及四格内容的具体安排，包括格4是否触发替换及原因）
 
 ## 英文提示词
 （单个代码块）
@@ -67,6 +70,7 @@ description: 生成包含多格细节特写的日系时尚目录排版图的 Gro
 
 ## 版本演进
 
-| 版本 |    日期     |     修改者     |                                           变更内容                                           |                       原因                        |
-| ---- | ---------- | ------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| v1.0 | 2026-03-10 | Dona / Claude | 初始版本，依照 skill-framework v1.1 规范重写；引用 core-anchors；保留固定四格结构和五层构建逻辑 | 替代原 Grok Imagine Catalog Inset Layout Engineer |
+| 版本 |    日期     |     修改者     |                                                                                               变更内容                                                                                                |                       原因                        |
+| ---- | ---------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| v1.0 | 2026-03-10 | Dona / Claude | 初始版本，依照 skill-framework v1.1 规范重写；引用 core-anchors；保留固定四格结构和五层构建逻辑                                                                                                          | 替代原 Grok Imagine Catalog Inset Layout Engineer |
+| v1.1 | 2026-03-10 | Dona / Claude | 第3步格4替换条件从"值得单独展示"主观判断改为"用户明确命名具体细节"，并说明模糊描述不触发替换；层4删除与第4步重复的"head-to-toe no cropping"合并保留一处；约束层新增格4替换规则说明；服装解析输出新增格4替换说明 | 修复格4判断标准主观、中英文规格重复两个问题          |
