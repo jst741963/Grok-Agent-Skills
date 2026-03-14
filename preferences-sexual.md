@@ -23,6 +23,7 @@ description: 用户性偏好锚点，供 image-prompt-portrait、image-prompt-ca
   - 洛丽塔（甜美哥特／经典／甜系／哥特风）
   - 汉服（改良短裙版／旗袍元素／传统汉元素融合现代剪裁）
   - 女仆装（经典黑白／哥特／甜系）
+- 图像提示词默认套装（image-prompt-catalog 未指定服装时使用）：白色半透蕾丝条纹连体睡裙、大酒红缎面蝴蝶结（Serendipity套装）
 - 偷感／被发现风险的反差（半公开轻微触摸、可能被看到）
 
 ## 偏好的场景与动态
@@ -55,3 +56,4 @@ description: 用户性偏好锚点，供 image-prompt-portrait、image-prompt-ca
 | ---- | ---- | ---- | ---- | ---- |
 | v1.0 | 2026-03-13 | Dona / Claude | 从 core-anchors 章节1拆分独立 | 按章节拆分以解决 document_search chunk 截断问题 |
 | v1.1 | 2026-03-14 | Dona / Claude | 重命名为 preferences-sexual；description 移除 preference-profiler 引用 | 适配多域偏好架构，preference-profiler 已重构为 preferences-builder |
+| v1.2 | 2026-03-14 | Dona / Claude | 服装池末尾新增图像提示词默认套装条目（Serendipity套装） | 将 image-prompt-catalog 硬编码的默认套装迁移至偏好文件集中管理 |
