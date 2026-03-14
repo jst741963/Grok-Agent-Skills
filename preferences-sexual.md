@@ -1,9 +1,9 @@
 ---
-name: preferences
-description: 用户偏好锚点，供 image-prompt-portrait、image-prompt-catalog、image-prompt-video、preference-profiler、preference-override 等技能读取。
+name: preferences-sexual
+description: 用户性偏好锚点，供 image-prompt-portrait、image-prompt-catalog、image-prompt-video、preference-override 等技能读取。
 ---
 
-# preferences
+# preferences-sexual
 
 ## 基本角色与取向
 
@@ -37,9 +37,9 @@ description: 用户偏好锚点，供 image-prompt-portrait、image-prompt-catal
 
 ## 强烈喜欢的元素
 
-- 口交、乳交、足交、阴道交
-- 录像／拍照自己看（私密，强化被记录羞耻感）
-- 镜子前观看自己反应
+- 口交、乳交、足交、阴道交 ★★★★☆
+- 录像／拍照自己看（私密，强化被记录羞耻感）★★★☆☆
+- 镜子前观看自己反应 ★★★☆☆
 
 ## 明确排斥／硬性界限
 
@@ -54,3 +54,4 @@ description: 用户偏好锚点，供 image-prompt-portrait、image-prompt-catal
 | 版本 | 日期 | 修改者 | 变更内容 | 原因 |
 | ---- | ---- | ---- | ---- | ---- |
 | v1.0 | 2026-03-13 | Dona / Claude | 从 core-anchors 章节1拆分独立 | 按章节拆分以解决 document_search chunk 截断问题 |
+| v1.1 | 2026-03-14 | Dona / Claude | 重命名为 preferences-sexual；description 移除 preference-profiler 引用 | 适配多域偏好架构，preference-profiler 已重构为 preferences-builder |

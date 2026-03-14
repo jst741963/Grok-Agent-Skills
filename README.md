@@ -12,4 +12,4 @@
 
 - `skill-router.md`
 - 你要用到的目标技能文件（如 `image-prompt-portrait.md` / `novel-narrator.md`）
-- `preferences.md` / `novel-rules.md` / `compliance.md`（按需提供对应的共享锚点文件）
+- `preferences-sexual.md` / `novel-rules.md` / `compliance.md`（按需提供对应的共享锚点文件）
