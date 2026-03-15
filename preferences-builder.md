@@ -14,11 +14,12 @@ reads: preferences-sexual
 
 ## 当前支持的偏好域
 
-| 域标识 | 文件 | 内容范围 |
-| ---- | ---- | ---- |
-| sexual | preferences-sexual.md | 性偏好、性幻想、性癖 |
+| 域标识 | 文件 | 内容范围 | 采集子流程 |
+| ---- | ---- | ---- | ---- |
+| sexual | preferences-sexual.md | 性偏好、性幻想、性癖 | 有（见第2步 Sexual 域子流程） |
+| aesthetic | preferences-aesthetic.md | 视觉美学偏好：摄影风格、光线、构图、背景；插画风格（预留） | 无——内容由 content-library 从现有技能提取维护，不通过访谈采集 |
 
-新增域时在此表扩展，并在第2步新增对应子流程。
+新增域时在此表扩展，并在第2步新增对应子流程（有采集需求时）或注明维护方式（无采集需求时）。
 
 ## 核心工作流
 
@@ -131,3 +132,4 @@ description: 用户性偏好锚点，供 image-prompt-portrait、image-prompt-ca
 | v1.0–v1.6 | 历史版本（已归档） | | 主要演进：从 Sexual Preference Profiler 重写→触发条件排除角色扮演场景、维度显式编号、输出时机量化、深度差异化执行、追问规则、星级标签规范、体系接口定义、路线二重构为直接输出 preferences.md | |
 | v2.0 | 2026-03-14 | Dona / Claude | 重命名为 preferences-builder；新增域路由架构（当前支持 sexual 域）；sexual 子流程从独立技能迁移为域子流程；输出目标从 preferences.md 改为 preferences-sexual.md；新增部分更新路径；约束层停止触发条件按深度模式区分；新增域扩展机制 | 适配多域偏好架构，支持未来新增偏好域 |
 | v2.1 | 2026-03-14 | Dona / Claude | 约束层补充版本演进表归档规则 | 与体系其他文件规范对齐 |
+| v2.2 | 2026-03-15 | Dona / Claude | 域表新增 aesthetic 行，补充「采集子流程」列；说明 aesthetic 域无采集子流程 | 适配 preferences-aesthetic 新增 |

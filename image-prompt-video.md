@@ -1,7 +1,7 @@
 ---
 name: image-prompt-video
 description: 生成 Grok Imagine 图生视频的提示词。当用户想基于静态图片生成动态视频、描述动作演进或情节变化时触发。只描述动态变化，不重复静态图片特征。如果用户需要单张人物写真提示词，使用 image-prompt-portrait；如果用户需要目录排版图提示词，使用 image-prompt-catalog。
-reads: preferences-sexual, compliance
+reads: preferences-sexual, compliance, preferences-aesthetic
 ---
 
 # image-prompt-video
@@ -14,8 +14,8 @@ reads: preferences-sexual, compliance
 
 ## 核心工作流
 
-1. **读取偏好与合规红线**：将 `preferences-sexual`（用户性偏好锚点）和 `compliance`（视觉合规红线）的完整内容读入当前上下文——视频生成的合规要求与静态图片一致，偏好锚点用于补全服装、风格等用户未指定的要素，两者必须在生成前完整读取。
-   - 若当前对话上下文中未找到上述文件，先提示用户确认文件是否已上传至 Project Files；不自行编写替代内容或凭记忆生成，以避免口径漂移。
+1. **读取偏好与合规红线**：将 `preferences-sexual`（用户性偏好锚点）、`compliance`（视觉合规红线）、`preferences-aesthetic`（视觉美学偏好）的完整内容读入当前上下文——视频生成的合规要求与静态图片一致，偏好锚点用于补全服装、风格等用户未指定要素，美学偏好锚定视频整体风格基调，三者必须在生成前完整读取。
+   - 若当前对话上下文中未找到上述任一文件，先提示用户确认文件是否已上传至 Project Files；不自行编写替代内容或凭记忆生成，以避免口径漂移。
 
 2. **解析用户输入**：识别用户提供的静态图片描述和想要的动态变化意图。若用户未提供静态图片描述，主动询问「请描述你的静态图片，或告诉我想要什么样的动态效果」——有了静态基础才能准确生成动态变化。静态特征（人物外貌、服装、场景）作为背景信息理解意图，不写入提示词——重复静态特征会让模型困惑，削弱动态指令的权重。服装、风格等用户未指定的要素从 preferences-sexual 补全，补全逻辑与 image-prompt-portrait 一致。
 
@@ -24,6 +24,7 @@ reads: preferences-sexual, compliance
 3. **提炼动态核心**：锁定本次视频的一个核心动态。优先级顺序：情节演进 > 情绪变化 > 肢体动作 > 光影运动——情节演进包含最强的故事性，优先选取；若用户输入同时涉及多种动态类型，按此优先级选取最高级别的一种作为核心，其余作为辅助细节融入描述，不并列多个核心。
 
 4. **构建提示词**：
+   - 整体风格基调参考 `preferences-aesthetic` 摄影风格章节（video 行）
    - 只描述动态变化、动作过渡、情绪递进、光影运动
    - 随机加入1-2个自然运动细节（微风、轻微晃动、呼吸起伏、目光转移等）增加真实感
    - 融入轻微故事性或情感弧线，让5-10秒有起伏
@@ -40,6 +41,8 @@ reads: preferences-sexual, compliance
 不使用负面提示词——正面描述想要的动态，而不是排除不想要的结果。
 
 只输出一个提示词——多个版本会让用户难以判断优劣。
+
+全局禁用词汇见 `preferences-aesthetic` 禁用词汇章节。
 
 发现用户输入包含任何未成年暗示时立即拒绝并说明原因。
 
@@ -64,6 +67,6 @@ reads: preferences-sexual, compliance
 
 | 版本 | 日期 | 修改者 | 变更内容 | 原因 |
 | ---- | ---- | ---- | ---- | ---- |
-| v1.0–v1.2 | 历史版本（已归档） | | 主要演进：从 Grok Imagine ImageToVideo Prompt Engineer 重写→静态锚点例外规则→词数弹性上限→core-anchors 拆分适配 | |
-| v1.3 | 2026-03-14 | Dona / Claude | 第2步场景锚点触发条件改为可操作判断标准；第3步多动态类型并存时加入优先级顺序；第4步「独立动态节点」明确定义；输出规格动态分析补充多类型选取原因说明 | 修复锚点触发条件主观、多动态类型选择原则缺失、独立动态节点未定义三个问题 |
+| v1.0–v1.3 | 历史版本（已归档） | | 主要演进：从 Grok Imagine ImageToVideo Prompt Engineer 重写→静态锚点例外规则→词数弹性上限→core-anchors 拆分适配→多动态类型优先级→独立动态节点定义 | |
 | v1.4 | 2026-03-14 | Dona / Claude | 第1步补充读取 preferences-sexual；第2步补充偏好补全说明；约束层补充归档规则 | 修复未读取偏好锚点导致风格与其他 image-prompt 技能不一致、缺少归档规则两个问题 |
+| v1.5 | 2026-03-15 | Dona / Claude | 新增 preferences-aesthetic 读取；第4步补充从 preferences-aesthetic 读取整体风格基调；约束层禁用词汇改为引用 preferences-aesthetic | 体系自进化：美学参数集中管理，技能瘦身 |

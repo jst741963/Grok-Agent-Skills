@@ -1,7 +1,7 @@
 ---
 name: image-prompt-catalog
 description: 生成包含多格细节特写的日系时尚目录排版图的 Grok Imagine 提示词。当用户想生成左侧四格inset细节特写加右侧全身主图的目录排版风格图片时触发。如果用户需要单张人物写真提示词，使用 image-prompt-portrait；如果用户需要图生视频提示词，使用 image-prompt-video。
-reads: preferences-sexual, compliance
+reads: preferences-sexual, compliance, preferences-aesthetic
 ---
 
 # image-prompt-catalog
@@ -14,8 +14,8 @@ reads: preferences-sexual, compliance
 
 ## 核心工作流
 
-1. **读取用户偏好和合规红线**：将 `preferences-sexual`（用户性偏好锚点）和 `compliance`（视觉合规红线）的完整内容读入当前上下文，作为后续所有步骤的约束基础。
-   - 若当前对话上下文中未找到上述文件，先提示用户确认文件是否已上传至 Project Files；不自行编写替代红线或凭记忆生成，以避免口径漂移。
+1. **读取用户偏好和合规红线**：将 `preferences-sexual`（用户性偏好锚点）、`compliance`（视觉合规红线）、`preferences-aesthetic`（视觉美学偏好）的完整内容读入当前上下文，作为后续所有步骤的约束基础。
+   - 若当前对话上下文中未找到上述任一文件，先提示用户确认文件是否已上传至 Project Files；不自行编写替代红线或凭记忆生成，以避免口径漂移。
 
 2. **解析服装描述**：从用户输入中提取服装颜色、款式、材质、配件等细节。若用户未提供服装描述或说"用默认"，从 preferences-sexual 服装池中读取「图像提示词默认套装」条目使用。
 
@@ -30,14 +30,14 @@ reads: preferences-sexual, compliance
 4. **构建主图参数**：
    - 朝向：默认正面或轻微3/4正面，确保脸部完整可见；用户明确要求「后背」「背影」时转背；用户要求「侧面」时使用90度侧身，脸部保持可见（不完全转背）；服装背部有核心设计元素（露背、系带、镂空）且用户描述明确强调该元素时，视为隐含转背意图，等同用户明确要求转背
    - 姿势：完全开放，允许坐姿、跪姿、半躺、倚靠等自然放松姿势，由服装和场景自然决定
-   - 构图：右侧占约2/3宽度，上下留负空间，头到脚完整不裁切
+   - 构图：从 `preferences-aesthetic` 构图偏好章节（目录行）读取
 
 5. **按结构构建提示词**：
-   - **层1 摄影风格**：professional studio fashion catalog photography, soft diffused natural lighting, ultra clean and sharp yet realistic, no plastic shine, matte finish, velvety smooth skin
+   - **层1 摄影风格**：从 `preferences-aesthetic` 摄影风格章节（catalog 行）读取
    - **层2 人物锚点**：East Asian Chinese adult woman, visual age 18-25, innocent yet subtly seductive restrained expression, petite slender delicate build, perfect smooth flawless legs under stockings, delicate lace naturally adhering without visible marks
    - **层3 服装细节**：严格匹配用户描述或 Serendipity 默认套装
-   - **层4 排版构图**：left side 4 standalone isolated inset panels arranged vertically: [格1描述], [格2描述], [格3描述], [格4描述]（四格按序以逗号分隔，每格用简洁短语描述特写内容）, right side full body occupying approximately two thirds of frame, natural relaxed pose, head-to-toe no cropping
-   - **层5 背景与收尾**：minimalist light pink gingham grid background, generous negative space top and bottom
+   - **层4 排版构图**：从 `preferences-aesthetic` 构图偏好章节（目录行）读取，四格按序以逗号分隔，每格用简洁短语描述特写内容：[格1描述], [格2描述], [格3描述], [格4描述]
+   - **层5 背景与收尾**：从 `preferences-aesthetic` 背景偏好章节（目录默认行）读取
 
 6. **输出提示词**：输出单个英文提示词代码块，附中文翻译。
 
@@ -49,7 +49,7 @@ reads: preferences-sexual, compliance
 
 格4替换仅在用户明确命名可独立特写的具体部位且格1-3未覆盖时触发——感受性或评价性描述不触发，避免主观判断导致每次结果不一致。
 
-不在提示词中使用强调"皮肤/面部完美无瑕"的修饰词（如 hyper-detailed、perfect skin、ultra-realistic）——这类词会强化 AI 生成感，与真实摄影风格的目标相反。`compliance` 指定的袜腿合规句和层1中的摄影技术描述词属于例外，允许保留。
+全局禁用词汇见 `preferences-aesthetic` 禁用词汇章节；`compliance` 指定的袜腿合规句和层1中的摄影技术描述词属于例外，允许保留。
 
 发现用户输入包含任何未成年暗示时立即拒绝并说明原因。
 
@@ -77,6 +77,6 @@ reads: preferences-sexual, compliance
 
 | 版本 | 日期 | 修改者 | 变更内容 | 原因 |
 | ---- | ---- | ---- | ---- | ---- |
-| v1.0–v1.4 | 历史版本（已归档） | | 主要演进：从 Grok Imagine Catalog Inset Layout Engineer 重写→格4替换条件具体化→core-anchors 拆分适配→preferences-sexual 迁移→格4固定结构不可调整说明 | |
-| v1.5 | 2026-03-14 | Dona / Claude | 第3步格4替换判断原则从举例改为可操作原则并加入格1-3未覆盖条件；第4步补充侧面朝向处理；第5步层4四格描述格式明确为逐格短语以逗号分隔；约束层补充固定结构不可调整说明；输出规格可调整项明确可调整范围并排除固定结构；版本演进表归档早期记录 | 修复格4判断原则依赖举例、侧面朝向未说明、层4格描述格式未定义、固定结构误列可调整、版本表超限五个问题 |
+| v1.0–v1.5 | 历史版本（已归档） | | 主要演进：从 Grok Imagine Catalog Inset Layout Engineer 重写→格4替换条件具体化→core-anchors 拆分适配→preferences-sexual 迁移→格4固定结构不可调整说明 | |
 | v1.6 | 2026-03-14 | Dona / Claude | 第2步默认套装改为读取 preferences-sexual；第3步格4多候选补充选取规则；第4步补充露背服装隐含转背规则；第5步层2袜腿措辞与 compliance 对齐；约束层补充归档规则 | 修复默认套装硬编码、格4多候选无规则、露背转背未定义、袜腿措辞不一致、缺少归档规则五个问题 |
+| v1.7 | 2026-03-15 | Dona / Claude | 新增 preferences-aesthetic 读取；层1、层4构图、层5背景改为从 preferences-aesthetic 对应章节读取；第4步构图参数改为引用 preferences-aesthetic；约束层禁用词汇改为引用 preferences-aesthetic | 体系自进化：美学参数集中管理，技能瘦身 |
